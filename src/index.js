@@ -8,16 +8,37 @@ import { createStore } from 'redux';
 const initialState = {
   player1: 0,
   player2: 0,
+  serving: 1, 
 };
 
-// 
-// const changeReducer = (currentState, action) => {
-//   return 
-// }
+const server = (state) => {
+  let total = state.player1 + state.player2
+  return {
+    ...state,
+    serving: Math.floor(total / 5) % 2 === 0 ? 1 : 2 // math.floor rounds number down  
+  }
+}
+
+const incrementPlayer1 = (state) => { // accepts state object
+  return {
+  ...state, // copying the state object, accessing property within 
+  player1: state.player1 + 1 // access the property (player1), state.player1 + 1 allows you to increment. 
+  }
+}
+
+const incrementPlayer2 = (state) => {
+  return {
+  ...state, 
+  player2: state.player2 + 1
+  }
+}
+
+
+
 const reducer = (state, action) => {
   switch (action.type){
-    case "INCREMENTPLAYER1" : return { ...state, player1: state.player1 + 1 }; 
-    case "INCREMENTPLAYER2" : return { ...state, player2: state.player2 + 1 };
+    case "INCREMENTPLAYER1" : return server(incrementPlayer1(state)); 
+    case "INCREMENTPLAYER2" : return server(incrementPlayer2(state)); 
     case "RESET" : return initialState ; //  added reset action, need 2 setState to initialState // had { initialState } before, didn't reset showed as NaN on browser. 
     default: return state;
   }
@@ -42,6 +63,7 @@ ReactDOM.render(
         player2 = {state.player2} 
         handleIncrementPlayer2={ () => store.dispatch({ type: "INCREMENTPLAYER2" })}
         handleReset={ () => store.dispatch({ type: "RESET" })}
+        serving = { state.serving }
         />
   </React.StrictMode>,
   document.getElementById('root')
@@ -58,4 +80,3 @@ render(); /*render when page loads using initial state */
 reportWebVitals();
 // dispatch, dispatches an action
 // createStore is the Redux part of it all
-//
