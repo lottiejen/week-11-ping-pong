@@ -9,6 +9,7 @@ const initialState = {
   player1: 0,
   player2: 0,
   serving: 1, 
+  winner: 0,  
 };
 
 const server = (state) => {
@@ -33,13 +34,23 @@ const incrementPlayer2 = (state) => {
   }
 }
 
+const isThereAWinner = (state) => {
+  return state.player1 >= 21 || state.player2 >= 21 // isThereAWinner returns true or false 
+}
+
+const whoWins = (state)  => {
+  return {
+    ...state, 
+    winner: isThereAWinner(state) ? (state.player1 > state.player2 ? 1 : 2) : 0 // if a winner, compares the player scores in brackets // if false, will set winner property to 0. 
+  }
+}
 
 
 const reducer = (state, action) => {
   switch (action.type){
-    case "INCREMENTPLAYER1" : return server(incrementPlayer1(state)); 
-    case "INCREMENTPLAYER2" : return server(incrementPlayer2(state)); 
-    case "RESET" : return initialState ; //  added reset action, need 2 setState to initialState // had { initialState } before, didn't reset showed as NaN on browser. 
+    case "INCREMENTPLAYER1" : return whoWins(server(incrementPlayer1(state)))
+    case "INCREMENTPLAYER2" : return whoWins(server(incrementPlayer2(state)))
+    case "RESET" : return initialState ; 
     default: return state;
   }
 };
@@ -64,6 +75,7 @@ ReactDOM.render(
         handleIncrementPlayer2={ () => store.dispatch({ type: "INCREMENTPLAYER2" })}
         handleReset={ () => store.dispatch({ type: "RESET" })}
         serving = { state.serving }
+        winner = { state.winner }
         />
   </React.StrictMode>,
   document.getElementById('root')
