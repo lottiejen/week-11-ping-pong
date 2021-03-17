@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 
-const App = ({player1, player2, handleIncrementPlayer1, handleIncrementPlayer2, handleReset, serving}) => (
+const App = ({player1, player2, handleIncrementPlayer1, handleIncrementPlayer2, handleReset, serving, winner}) => (
   <>
       {/* header */}
       <header className="jumbotron mt-4 mb-0">
@@ -35,7 +35,7 @@ const App = ({player1, player2, handleIncrementPlayer1, handleIncrementPlayer2, 
           </div>
       </div>
       { /* winner message */}
-      <h2 className="alert alert-success">Player {/* winning player here */} Wins!</h2>
+      {winner !== 0 ? <h2 className="alert alert-success">Player { winner } Wins!</h2> : null }
       <hr />
       { /* reset button */}
       <button className="btn btn-danger"
